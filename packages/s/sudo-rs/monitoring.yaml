@@ -1,0 +1,9 @@
+releases:
+  id: 371563
+  rss: https://github.com/trifectatechfoundation/sudo-rs/tags.atom
+security:
+  cpe:
+    - vendor: trifectatech
+      product: sudo
+    - vendor: memorysafety
+      product: sudo

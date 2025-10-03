@@ -1,0 +1,21 @@
+# sudoers-rs configuration for sudo-rs on Solus
+# This file is specifically for sudo-rs and won't affect the system sudo
+
+# Set secure path for sudo-rs
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Allow root to run any commands anywhere
+root ALL=(ALL) ALL
+
+# Allow members of the wheel group to run any commands (Solus default)
+%wheel ALL=(ALL) ALL
+
+# Allow members of the sudo group to run any commands
+%sudo ALL=(ALL) ALL
+
+# Allow users in the admin group to run any commands
+%admin ALL=(ALL) ALL
+
+# Solus-specific: Allow eopkg operations
+# Uncomment if you want passwordless eopkg operations:
+# %wheel ALL=(ALL) NOPASSWD: /usr/bin/eopkg

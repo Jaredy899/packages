@@ -1,0 +1,42 @@
+name       : sudo-rs
+version    : 0.2.8
+release    : 1
+source     :
+    - https://github.com/trifectatechfoundation/sudo-rs/archive/refs/tags/v0.2.8.tar.gz : 5b3823cc60abc5d90dbf0ae3a37d92445215e2697e6997c56148f5d0ac371ece
+homepage   : https://github.com/trifectatechfoundation/sudo-rs
+license    : Apache-2.0
+summary    : A memory-safe implementation of sudo and su written in Rust
+component  : system.base
+description: |
+    Sudo-rs is a memory-safe implementation of sudo and su written in Rust. It provides a drop-in replacement for the traditional sudo command with improved security through memory safety guarantees. The implementation supports most common use cases of the original sudo while being designed with modern security practices in mind.
+builddeps  :
+#    - pam-devel
+    - rust
+networking : true
+#rundeps    :
+#    - pam
+setup      : |
+    cargo fetch --locked
+build      : |
+    cargo build --release --frozen
+install    : |
+    # Install sudo-rs binary with setuid bit
+    install -Dm4755 target/release/sudo $installdir/usr/bin/sudo-rs
+    # Install su-rs binary with setuid bit
+    install -Dm4755 target/release/su $installdir/usr/bin/su-rs
+    # Install visudo-rs binary
+    install -Dm00755 target/release/visudo $installdir/usr/sbin/visudo-rs
+    # Install license files
+    install -Dm644 LICENSE-APACHE $installdir/usr/share/licenses/sudo-rs/LICENSE-APACHE
+    install -Dm644 LICENSE-MIT $installdir/usr/share/licenses/sudo-rs/LICENSE-MIT
+    # Install PAM configuration
+    # install -Dm644 $pkgfiles/pam.d/sudo $installdir/etc/pam.d/sudo
+    # install -Dm644 $pkgfiles/pam.d/sudo-i $installdir/etc/pam.d/sudo-i
+    # Install sudoers-rs for sudo-rs specific configuration
+    # This avoids conflicts with the system sudo package
+    install -Dm644 $pkgfiles/sudoers $installdir/etc/sudoers-rs
+    # Install man pages
+    install -Dm644 docs/man/sudo.8.man $installdir/usr/share/man/man8/sudo-rs.8
+    install -Dm644 docs/man/su.1.man $installdir/usr/share/man/man1/su-rs.1
+    install -Dm644 docs/man/sudoers.5.man $installdir/usr/share/man/man5/sudoers-rs.5
+    install -Dm644 docs/man/visudo.8.man $installdir/usr/share/man/man8/visudo-rs.8
