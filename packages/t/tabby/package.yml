@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=/usr/share/ypkg/schema/schema.json
+name       : tabby
+version    : 1.0.234
+release    : 1
+source     :
+    - https://github.com/Eugeny/tabby/archive/refs/tags/v1.0.234.tar.gz : 653b666bf0d4ecc935cba8dd417a884cbf9a316e646cb6d4b9863c8c9f3dbba2
+homepage   : https://tabby.sh
+license    : MIT
+component  : system.utils
+networking : true
+summary    : A highly configurable terminal emulator, SSH and serial client
+description: |
+    Tabby (formerly Terminus) is a modern terminal emulator for local shells,
+    SSH, Telnet, and serial connections. It features a tabbed interface,
+    integrated connection management, theming and color schemes, and fully
+    configurable keyboard shortcuts.
+builddeps  :
+    - pkgconfig(alsa)
+    - pkgconfig(fontconfig)
+    - pkgconfig(gbm)
+    - pkgconfig(gtk+-3.0)
+    - pkgconfig(libsecret-1)
+    - pkgconfig(xscrnsaver)
+    - cmake
+    - git
+    - yarn
+rundeps    :
+    - gnome-keyring
+    - hicolor-icon-theme
+    - libgnome-keyring
+    - libnotify
+environment: |
+    export TABBY_PACKAGE_VERSION=%version%
+setup      : |
+    %patch -p1 -i ${pkgfiles}/version-from-env.patch
+    %patch -p1 -i ${pkgfiles}/build-linux-dir.patch
+    %patch -p1 -i ${pkgfiles}/no-glasstron-linux.patch
+
+    yarn install --frozen-lockfile
+build      : |
+    yarn run build
+    node scripts/prepackage-plugins.mjs
+    node scripts/build-linux.mjs
+install    : |
+    appdir=dist/linux-unpacked/resources/app.asar.unpacked/node_modules
+
+    # Drop foreign-arch native modules; they break strip and confuse the dependency resolver
+    rm -rf ${appdir}/@serialport/bindings-cpp/prebuilds/android-*
+    rm -rf ${appdir}/@serialport/bindings-cpp/prebuilds/darwin-*
+    rm -rf ${appdir}/@serialport/bindings-cpp/prebuilds/linux-arm*
+    rm -rf ${appdir}/@serialport/bindings-cpp/prebuilds/win32-*
+    rm -f ${appdir}/@serialport/bindings-cpp/prebuilds/linux-x64/node.napi.musl.node
+
+    rm -rf ${appdir}/node-pty/prebuilds/darwin-*
+    rm -rf ${appdir}/node-pty/prebuilds/linux-arm64
+    rm -rf ${appdir}/node-pty/prebuilds/win32-*
+
+    rm -f ${appdir}/russh/russh.darwin-*.node
+    rm -f ${appdir}/russh/russh.linux-arm*.node
+    rm -f ${appdir}/russh/russh.win32-*.node
+
+    install -dm00755 ${installdir}/usr/share/tabby
+    cp -a dist/linux-unpacked/. ${installdir}/usr/share/tabby/
+
+    install -Dm00755 ${pkgfiles}/tabby.sh ${installdir}/usr/bin/tabby
+
+    install -Dm00644 ${pkgfiles}/org.tabby.Tabby.desktop -t ${installdir}/usr/share/applications
+    install -Dm00644 ${pkgfiles}/org.tabby.Tabby.metainfo.xml -t ${installdir}/usr/share/metainfo
+
+    for i in 16 32 64 128 256 512; do
+        install -Dm00644 build/icons/${i}x${i}.png ${installdir}/usr/share/icons/hicolor/${i}x${i}/apps/tabby.png
+    done
+
+    %install_license LICENSE

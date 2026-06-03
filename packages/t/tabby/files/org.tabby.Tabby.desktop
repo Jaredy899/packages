@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Tabby
+Comment=Modern terminal for SSH, serial and local shells
+Exec=tabby %U
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=tabby
+Categories=System;TerminalEmulator;
+MimeType=x-scheme-handler/tabby;
+StartupWMClass=tabby

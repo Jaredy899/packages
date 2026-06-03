@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>org.tabby.Tabby</id>
+  <name>Tabby</name>
+  <summary>A highly configurable terminal emulator, SSH and serial client</summary>
+  <categories>
+    <category>System</category>
+    <category>TerminalEmulator</category>
+  </categories>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="org.tabby">
+    <name>Tabby Developers</name>
+  </developer>
+  <description>
+    <p>
+      Tabby (formerly Terminus) is a modern terminal emulator for local shells,
+      SSH, Telnet, and serial connections. It features a tabbed interface,
+      integrated connection management, theming and color schemes, and fully
+      configurable keyboard shortcuts.
+    </p>
+    <p>Features include:</p>
+    <ul>
+      <li>Integrated SSH, Telnet, and serial terminal</li>
+      <li>Connection manager with saved profiles</li>
+      <li>Theming and community color schemes</li>
+      <li>Configurable shortcuts and multi-chord bindings</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">org.tabby.Tabby.desktop</launchable>
+  <url type="homepage">https://tabby.sh</url>
+  <url type="bugtracker">https://github.com/Eugeny/tabby/issues</url>
+  <url type="vcs-browser">https://github.com/Eugeny/tabby</url>
+  <screenshots>
+    <screenshot type="default">
+      <caption>Tabby terminal interface</caption>
+      <image>https://user-images.githubusercontent.com/161476/126016449-a053012a-e322-48ed-a2ab-3ed4f3281465.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1"/>
+</component>

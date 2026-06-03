@@ -1,0 +1,24 @@
+diff --git a/app/lib/window.ts b/app/lib/window.ts
+index 1111111..2222222 100644
+--- a/app/lib/window.ts
++++ b/app/lib/window.ts
+@@ -105,7 +105,7 @@ export class Window {
+             bwOptions.visualEffectState = 'active'
+         }
+ 
+-        if (process.platform === 'darwin') {
++        if (process.platform === 'darwin' || process.platform === 'linux') {
+             this.window = new BrowserWindow(bwOptions) as GlasstronWindow
+         } else {
+             this.window = new glasstron.BrowserWindow(bwOptions)
+@@ -202,7 +202,9 @@ export class Window {
+             }
+         } else if (process.platform === 'linux') {
+             this.window.setBackgroundColor(enabled ? '#00000000' : '#131d27')
+-            this.window.setBlur(enabled)
++            if (typeof (this.window as GlasstronWindow).setBlur === 'function') {
++                (this.window as GlasstronWindow).setBlur(enabled)
++            }
+         } else {
+             this.window.setVibrancy(enabled ? macOSVibrancyType : null)
+         }
